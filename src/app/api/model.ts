@@ -16,6 +16,7 @@ export interface Agent {
 }
 
 export interface RealEstate {
+  id: number;
   address: string;
   image: string;
   region_id: number;
@@ -25,4 +26,11 @@ export interface RealEstate {
   price: number;
   area: number;
   bedrooms: number;
+  is_rental: number;
+  city: {
+    id: number;
+    name: string;
+    region_id: number;
+    region: Region;
+  };
 }

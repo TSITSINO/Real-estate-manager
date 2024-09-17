@@ -1,0 +1,46 @@
+<div
+  class="example-card"
+  appearance="outlined"
+  class="rounded-lg overflow-hidden border-x-2 border-b-2 border-gray hover:border-0 hover:shadow-xl"
+>
+  <h5 class="absolute p-1 rounded-lg m-4 text-white text-xs">
+    @if(realEstate?.is_rental){
+    <span>ქირავდება</span>
+    }@else {<span>იყიდება</span>}
+  </h5>
+
+  <img mat-card-image [src]="realEstate?.image" alt="" class="h-80" />
+
+  <div class="p-4 mt-3">
+    <p class="flex flex-row">
+      <span class="font-extrabold text-xl">{{ realEstate?.price }}</span
+      ><img src="assets\Gel.svg" alt="" class="ml-2 w-3" />
+    </p>
+
+    <p class="text-secondary flex justify-start gap-1 text-sm my-2">
+      <img src="assets\place-icon.svg" alt="" class="size-4" />
+      <span>{{ realEstate?.address }}</span>
+    </p>
+
+    <div class="flex justify-start gap-4 text-s text-secondary">
+      <p class="flex justify-start gap-1 text-sm items-center mt-1">
+        <img src="assets\bed.svg" alt="" class="size-5" />
+        <span>{{ realEstate?.bedrooms }}</span>
+      </p>
+
+      <p
+        class="text-secondary flex justify-start gap-1 items-center text-sm ml-1 mt-1"
+      >
+        <img src="assets\vector.svg" alt="" class="size-4" />
+        <span>{{ realEstate?.area }}</span>
+      </p>
+
+      <p
+        class="text-secondary flex justify-start gap-1 items-center text-sm mt-1"
+      >
+        <img src="assets\zip-cod-icon.svg" alt="" class="size-4" />
+        <span>{{ realEstate?.zip_code }}</span>
+      </p>
+    </div>
+  </div>
+</div>
