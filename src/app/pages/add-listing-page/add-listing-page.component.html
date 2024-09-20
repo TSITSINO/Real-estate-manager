@@ -1,0 +1,385 @@
+<section class="flex justify-center flex-col items-center">
+  <h1 class="text-xl font-bold my-6">ლისტინგის დამატება</h1>
+  <form [formGroup]="listingForm" (ngSubmit)="onSubmit()">
+    <div class="w-[790px]">
+      <section class="example-section">
+        <p class="text-base font-semibold mb-4">გარიგების ტიპი</p>
+        <mat-radio-group formControlName="is_rental">
+          <mat-radio-button class="mr-2 text-sm" value="0"
+            >იყიდება</mat-radio-button
+          >
+          <mat-radio-button class="mx-2 text-sm" value="1"
+            >ქირავდება</mat-radio-button
+          >
+        </mat-radio-group>
+      </section>
+
+      <section class="mt-20 flex flex-col">
+        <p class="text-base font-semibold">მდებარეობა</p>
+        <div class="grid grid-cols-2 mt-2 gap-4">
+          <div class="flex flex-col">
+            <label class="text-sm font-semibold mb-2" for="address"
+              >მისამართი<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="address"
+              formControlName="address"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['address'].invalid &&
+                  (listingForm.controls['address'].touched ||
+                    listingForm.controls['address'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['address'].invalid &&
+                  (listingForm.controls['address'].touched ||
+                    listingForm.controls['address'].dirty),
+                'text-success': !listingForm.controls['address'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მინიმუმ ორი სიმბოლო</span>
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <label for="zip-code" class="text-sm font-semibold mb-2"
+              >საფოსტო ინდექსი<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="zip-code"
+              formControlName="zip_code"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['zip_code'].invalid &&
+                  (listingForm.controls['zip_code'].touched ||
+                    listingForm.controls['zip_code'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['zip_code'].invalid &&
+                  (listingForm.controls['zip_code'].touched ||
+                    listingForm.controls['zip_code'].dirty),
+                'text-success': !listingForm.controls['zip_code'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მხოლოდ რიცხვები</span>
+            </p>
+          </div>
+          <div class="flex flex-col mt-4">
+            <label for="region" class="text-sm font-semibold mb-2">
+              რეგიონი<sup> *</sup>
+            </label>
+            <select
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="region"
+              formControlName="region"
+              [compareWith]="compareRegion"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['region'].invalid &&
+                  (listingForm.controls['region'].touched ||
+                    listingForm.controls['region'].dirty)
+              }"
+            >
+              <option
+                *ngFor="let region of regions$ | async"
+                [ngValue]="region"
+              >
+                {{ region.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="flex flex-col mt-4" *ngIf="listingFormCityEnable">
+            <label for="city" class="text-sm font-semibold mb-2"
+              >ქალაქი<sup> *</sup></label
+            >
+            <select
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="city"
+              formControlName="city"
+              [compareWith]="compareCity"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['city'].invalid &&
+                  (listingForm.controls['city'].touched ||
+                    listingForm.controls['city'].dirty)
+              }"
+            >
+              <option *ngFor="let city of cities$ | async" [ngValue]="city">
+                {{ city.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-20 flex flex-col">
+        <p class="text-base font-semibold">ბინის დეტალები</p>
+        <div class="grid grid-cols-2 mt-2 gap-4">
+          <div class="flex flex-col">
+            <label for="price" class="text-sm font-semibold mb-2"
+              >ფასი<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="price"
+              formControlName="price"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['price'].invalid &&
+                  (listingForm.controls['price'].touched ||
+                    listingForm.controls['price'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['price'].invalid &&
+                  (listingForm.controls['price'].touched ||
+                    listingForm.controls['price'].dirty),
+                'text-success': !listingForm.controls['price'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მხოლოდ რიცხვები</span>
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <label for="area" class="text-sm font-semibold mb-2"
+              >ფართობი<sup> *</sup></label
+            >
+            <input
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="area"
+              formControlName="area"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['area'].invalid &&
+                  (listingForm.controls['area'].touched ||
+                    listingForm.controls['area'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['area'].invalid &&
+                  (listingForm.controls['area'].touched ||
+                    listingForm.controls['area'].dirty),
+                'text-success': !listingForm.controls['area'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მხოლოდ რიცხვები</span>
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <label for="bedrooms" class="font-semibold text-sm mb-2"
+              >საძინებლების რაოდენობა<sup> *</sup></label
+            >
+            <input
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="bedrooms"
+              formControlName="bedrooms"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['bedrooms'].invalid &&
+                  (listingForm.controls['bedrooms'].touched ||
+                    listingForm.controls['bedrooms'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['bedrooms'].invalid &&
+                  (listingForm.controls['bedrooms'].touched ||
+                    listingForm.controls['bedrooms'].dirty),
+                'text-success': !listingForm.controls['bedrooms'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მხოლოდ მთელი რიცხვები</span>
+            </p>
+          </div>
+          <div class="flex flex-col col-span-2">
+            <label for="description" class="font-semibold text-sm mb-2"
+              >აღწერა<sup> *</sup></label
+            >
+            <textarea
+              name="description"
+              formControlName="description"
+              class="border-2 rounded-lg h-36 w-full p-3"
+              [ngClass]="{
+                '!border-danger':
+                  listingForm.controls['description'].invalid &&
+                  (listingForm.controls['description'].touched ||
+                    listingForm.controls['description'].dirty)
+              }"
+            ></textarea>
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  listingForm.controls['description'].invalid &&
+                  (listingForm.controls['description'].touched ||
+                    listingForm.controls['description'].dirty),
+                'text-success': !listingForm.controls['description'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მინიმუმ ხუთი სიტყვა</span>
+            </p>
+          </div>
+          <div class="flex flex-col col-span-2">
+            <label for="text" class="font-semibold text-[14px]"
+              >ატვირთეთ ფოტო<sup> *</sup></label
+            >
+            <div class="relative">
+              <img src="assets/rectangle.svg" class="h-36 w-full" alt="" />
+              <div *ngIf="!imgSrc()">
+                <div class="custom-file absolute top-16 left-1/2">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="image"
+                    name="filename"
+                    (change)="onFileSelected($event)"
+                  />
+                  <label class="custom-file-label" for="image">
+                    <img
+                      src="assets/plus-circle.svg"
+                      alt=""
+                      class="cursor-pointer hover: color-primary"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="imgSrc()">
+                <div class="custom-file absolute top-10 left-96">
+                  <img
+                    [src]="imgSrc()"
+                    *ngIf="imgSrc()"
+                    class="size-20 rounded-lg"
+                  />
+                  <img
+                    src="assets/delete-icon.svg"
+                    class="absolute bottom-0 right-0 cursor-pointer"
+                    (click)="deleteImage()"
+                    accept=".png, .jpg, .jpeg"
+                  />
+                </div>
+              </div>
+              <p
+                *ngIf="
+                  listingForm.controls['image'].hasError('fileSizeExceeded') &&
+                  imgSrc()
+                "
+                class="flex justify-start gap-1 items-center text-sm mt-2 text-danger"
+              >
+                <mat-icon>done</mat-icon>
+                <span>არ უნდა აღემატებოდეს 1mb-ის ზომაში</span>
+              </p>
+              <p
+                *ngIf="
+                  listingForm.controls['image'].invalid &&
+                  (listingForm.controls['image'].touched ||
+                    listingForm.controls['image'].dirty)
+                "
+                class="flex justify-start gap-1 items-center text-sm mt-2 text-danger"
+              >
+                <mat-icon>done</mat-icon>
+                <span>ატვირთეთ ვალიდური ფაილი</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="my-20 flex flex-col">
+        <p class="text-base font-semibold mb-2">აგენტი <sup> *</sup></p>
+        <mat-accordion>
+          <mat-expansion-panel
+            [expanded]="panelOpenState() === true"
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+            class="w-[356px] border-2 border-gray !rounded-t-lg !rounded-lg"
+            [ngClass]="{
+              '!border-danger':
+                listingForm.controls['agent'].invalid &&
+                (listingForm.controls['agent'].touched ||
+                  listingForm.controls['agent'].dirty)
+            }"
+          >
+            <mat-expansion-panel-header class="!w-full !p-3">
+              <mat-panel-title class="w-full">
+                {{ panelOpenState() ? "აირჩიე" : "" }}
+                @if(listingForm.controls['agent'].value && panelOpenState() ===
+                false ){<span
+                  >{{ listingForm.controls["agent"].value.name }}
+                  {{ listingForm.controls["agent"].value.surname }}</span
+                >}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div
+              class="border-2 border-gray !w-full !p-3 flex justify-start items-center hover:bg-gray"
+              (click)="openDialog()"
+            >
+              <img
+                src="assets\plus-circle.svg
+    "
+                alt=""
+                class="cursor-pointer hover: color-primary"
+              />
+              <span class="ml-2">დაამატე აგენტი </span>
+            </div>
+
+            <div class="max-h-[150px] overflow-y-auto">
+              @for(agent of (agents$ | async); track agent.id){
+              <div
+                class="border-2 border-gray !w-full !p-3 flex justify-start items-center hover:bg-gray"
+                (click)="closeChooseAgent()"
+              >
+                <label class="container"
+                  >{{ agent.name }} {{ agent.surname }}
+                  <input type="radio" [value]="agent" formControlName="agent" />
+                </label>
+              </div>
+              }
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </section>
+
+      <section class="my-20 flex justify-end">
+        <button
+          class="bg-white hover:bg-primary hover:text-white rounded-lg border-2 border-gray p-2"
+          (click)="cancelAddListing()"
+        >
+          გაუქმება
+        </button>
+        <button
+          class="bg-primary rounded-lg hover:bg-dark text-white p-2 ml-2"
+          type="submit"
+        >
+          ლისტინგის დამატება
+        </button>
+      </section>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,212 @@
+<section class="flex justify-center flex-col items-center p-6">
+  <h1 class="text-xl font-bold my-10">აგენტის დამატება</h1>
+  <form [formGroup]="agentForm" (ngSubmit)="onSubmit()">
+    <div class="w-[790px]">
+      <section class="flex flex-col">
+        <div class="grid grid-cols-2 mt-2 gap-4">
+          <div class="flex flex-col">
+            <label class="text-sm font-semibold mb-2" for="name"
+              >გვარი<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="name"
+              formControlName="name"
+              [ngClass]="{
+                '!border-danger':
+                  agentForm.controls['name'].invalid &&
+                  (agentForm.controls['name'].touched ||
+                    agentForm.controls['name'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  agentForm.controls['name'].invalid &&
+                  (agentForm.controls['name'].touched ||
+                    agentForm.controls['name'].dirty),
+                'text-success': !agentForm.controls['name'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მინიმუმ ორი სიმბოლო</span>
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-sm font-semibold mb-2" for="surname"
+              >გვარი<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="surname"
+              formControlName="surname"
+              [ngClass]="{
+                '!border-danger':
+                  agentForm.controls['surname'].invalid &&
+                  (agentForm.controls['surname'].touched ||
+                    agentForm.controls['surname'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  agentForm.controls['surname'].invalid &&
+                  (agentForm.controls['surname'].touched ||
+                    agentForm.controls['surname'].dirty),
+                'text-success': !agentForm.controls['surname'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მინიმუმ ორი სიმბოლო</span>
+            </p>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-sm font-semibold mb-2" for="email"
+              >ელ-ფოსტა<sup> *</sup></label
+            >
+            <input
+              type="text"
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="email"
+              formControlName="email"
+              [ngClass]="{
+                '!border-danger':
+                  agentForm.controls['email'].invalid &&
+                  (agentForm.controls['email'].touched ||
+                    agentForm.controls['email'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  agentForm.controls['email'].invalid &&
+                  (agentForm.controls['email'].touched ||
+                    agentForm.controls['email'].dirty),
+                'text-success': !agentForm.controls['email'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>გამოიყენეთ &#64;redberry.ge ფოსტა</span>
+            </p>
+          </div>
+
+          <div class="flex flex-col">
+            <label for="phone" class="font-semibold text-sm mb-2"
+              >ტელეფონის ნომერი<sup> *</sup></label
+            >
+            <input
+              class="border-2 border-gray rounded-lg p-3 h-12 w-96"
+              name="phone"
+              formControlName="phone"
+              [ngClass]="{
+                '!border-danger':
+                  agentForm.controls['phone'].invalid &&
+                  (agentForm.controls['phone'].touched ||
+                    agentForm.controls['phone'].dirty)
+              }"
+            />
+            <p
+              class="flex justify-start gap-1 items-center text-sm mt-2"
+              [ngClass]="{
+                'text-danger':
+                  agentForm.controls['phone'].invalid &&
+                  (agentForm.controls['phone'].touched ||
+                    agentForm.controls['phone'].dirty),
+                'text-success': !agentForm.controls['phone'].invalid
+              }"
+            >
+              <mat-icon>done</mat-icon>
+              <span>მხოლოდ რიცხვები, ფორმატი: 5XXXXXXXXX</span>
+            </p>
+          </div>
+
+          <div class="flex flex-col col-span-2">
+            <label for="text" class="font-semibold text-[14px]"
+              >ატვირთეთ ფოტო<sup> *</sup></label
+            >
+            <div class="relative">
+              <img src="assets/rectangle.svg" class="h-36 w-full" alt="" />
+              @if(!imgSrc()){
+              <div>
+                <div class="custom-file absolute top-16 left-1/2">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="customFile"
+                    name="filename"
+                    (change)="onFileSelected($event)"
+                  />
+                  <label class="custom-file-label" for="customFile">
+                    <img
+                      src="assets/plus-circle.svg"
+                      alt=""
+                      class="cursor-pointer hover: color-primary"
+                    />
+                  </label>
+                </div>
+              </div>
+              } @if(imgSrc()){
+              <div>
+                <div class="custom-file absolute top-10 left-96">
+                  <img
+                    class="size-20 rounded-lg"
+                    [src]="imgSrc()"
+                    *ngIf="imgSrc()"
+                  />
+                  <img
+                    src="assets/delete-icon.svg"
+                    class="absolute bottom-0 right-0 cursor-pointer"
+                    (click)="deleteImage()"
+                  />
+                </div>
+              </div>
+              }
+              <p
+                class="flex justify-start gap-1 items-center text-sm mt-2 text-danger"
+                *ngIf="
+                  agentForm.controls['avatar'].hasError('fileSizeExceeded') &&
+                  imgSrc()
+                "
+              >
+                <mat-icon>done</mat-icon>
+                <span>არ უნდა აღემატებოდეს 1mb-ის ზომაში</span>
+              </p>
+              <p
+                class="flex justify-start gap-1 items-center text-sm mt-2 text-danger"
+                *ngIf="
+                  agentForm.controls['avatar'].invalid &&
+                  (agentForm.controls['avatar'].touched ||
+                    agentForm.controls['avatar'].dirty)
+                "
+              >
+                <mat-icon>done</mat-icon>
+                <span>ატვირთეთ ვალიდური ფაილი</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex justify-end">
+        <button
+          class="bg-white hover:bg-primary hover:text-white rounded-lg border-2 border-gray p-2"
+          routerLink="/home-page/"
+          mat-dialog-close
+        >
+          გაუქმება
+        </button>
+        <button
+          class="bg-primary rounded-lg hover:bg-dark text-white p-2 ml-2"
+          type="submit"
+        >
+          დაამატე აგენტი
+        </button>
+      </section>
+    </div>
+  </form>
+</section>

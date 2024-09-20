@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Agent, RealEstate } from '../model';
+import { catchError, Observable, throwError } from 'rxjs';
+import { NewRealEstate } from '../model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class RealEstateService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
     });
   }
@@ -25,13 +25,45 @@ export class RealEstateService {
     });
   }
 
-  postRealEstates(realEstate: RealEstate): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/real-estates`,
-      JSON.stringify(realEstate),
-      {
+  postRealEstates(realEstate: NewRealEstate): Observable<any> {
+    const formData = new FormData();
+
+    if (realEstate.address) formData.append('address', realEstate.address);
+    if (realEstate.region_id)
+      formData.append('region_id', realEstate.region_id.toString());
+    if (realEstate.description)
+      formData.append('description', realEstate.description);
+    if (realEstate.city_id)
+      formData.append('city_id', realEstate.city_id.toString());
+    if (realEstate.zip_code) formData.append('zip_code', realEstate.zip_code);
+    if (realEstate.price) formData.append('price', realEstate.price.toString());
+    if (realEstate.area) formData.append('area', realEstate.area.toString());
+    if (realEstate.bedrooms)
+      formData.append('bedrooms', realEstate.bedrooms.toString());
+    if (realEstate.is_rental !== null && realEstate.is_rental !== undefined)
+      formData.append('is_rental', realEstate.is_rental.toString());
+    if (realEstate.agent_id)
+      formData.append('agent_id', realEstate.agent_id.toString());
+
+    // Append the image file if available
+    if (realEstate.image instanceof File) {
+      formData.append('image', realEstate.image);
+    }
+
+    // Log FormData content for debugging
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    return this.http
+      .post<any>(`${this.apiUrl}/real-estates`, formData, {
         headers: this.getHeaders(),
-      }
-    );
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error occurred:', error);
+          return throwError(error);
+        })
+      );
   }
 }

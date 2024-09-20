@@ -1,3 +1,5 @@
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,7 +19,13 @@ html,
 body {
   height: 100%;
 }
-body {
-  margin: 0;
-  font-family: "FiraGO";
+
+body,
+button,
+input,
+textarea,
+select,
+h1,
+p {
+  font-family: "FiraGO", sans-serif !important;
 }

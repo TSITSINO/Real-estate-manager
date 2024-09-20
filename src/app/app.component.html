@@ -1,6 +1,11 @@
 <header
   class="h-24 w-full flex justify-between items-center border-b-2 border-gray"
 >
-  <img src="assets\logo.png" alt="" class="w-40 h-6 ml-20" />
+  <img
+    src="assets\logo.png"
+    alt=""
+    class="w-40 h-6 ml-20 cursor-pointer"
+    routerLink="/home-page/"
+  />
 </header>
-<app-home-page></app-home-page>
+<router-outlet></router-outlet>

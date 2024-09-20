@@ -1,0 +1,22 @@
+.custom-file-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.icon {
+  filter: invert(39%) sepia(94%) saturate(3165%) hue-rotate(348deg)
+    brightness(95%) contrast(107%);
+}
+:host::ng-deep .mat-expansion-panel-body {
+  padding: 0px !important;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
