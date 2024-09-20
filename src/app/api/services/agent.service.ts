@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Agent } from '../model';
+import { Agent, NewAgena } from '../model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class AgentService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
     });
   }
@@ -25,8 +25,18 @@ export class AgentService {
     });
   }
 
-  postAgent(agent: Agent): Observable<any> {
-    return this.http.post(`${this.apiUrl}/agents`, JSON.stringify(agent), {
+  postAgent(agent: NewAgena): Observable<any> {
+    const formData = new FormData();
+
+    if (agent.name) formData.append('name', agent.name);
+    if (agent.surname) formData.append('surname', agent.surname);
+    if (agent.phone) formData.append('phone', agent.phone);
+    if (agent.email) formData.append('email', agent.email);
+    if (agent.avatar instanceof File) {
+      formData.append('avatar', agent.avatar);
+    }
+
+    return this.http.post(`${this.apiUrl}/agents`, formData, {
       headers: this.getHeaders(),
     });
   }
