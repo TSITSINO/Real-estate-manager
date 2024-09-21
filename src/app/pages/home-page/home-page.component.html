@@ -19,13 +19,19 @@
       @if(regions && (regions$ | async);){
       <div
         class="mt-4 border-2 border-gray rounded-lg absolute p-4 z-40 bg-white"
+        #region
+        (click)="divClicked($event)"
       >
         <span class="text-base font-bold pb-4 block">რეგიონის მიხედვით</span>
         <div class="grid grid-cols-3 gap-6">
           @for(region of (regions$ | async); track region.id ){
           <label class="container"
             >{{ region.name }}
-            <input type="checkbox" />
+            <input
+              type="radio"
+              formControlName="region"
+              [value]="region.name"
+            />
             <span class="checkmark"></span> </label
           >}
         </div>
@@ -61,6 +67,8 @@
       @if(priceCategory){
       <div
         class="mt-4 border-2 border-gray rounded-lg absolute p-4 z-40 bg-white"
+        #priceCategory
+        (click)="divClicked($event)"
       >
         <span class="text-base font-bold pb-4 block"
           >ფასის მიხედვით მიხედვით</span
@@ -183,6 +191,8 @@
       @if(area){
       <div
         class="mt-4 border-2 border-gray rounded-lg absolute p-4 z-40 bg-white"
+        #area
+        (click)="divClicked($event)"
       >
         <span class="text-base font-bold pb-4 block">ფართობის მიხედვით </span>
         <div class="grid grid-cols-2 gap-6">
@@ -281,6 +291,8 @@
       @if(numberOfBedrooms){
       <div
         class="mt-4 border-2 border-gray rounded-lg absolute p-4 z-40 bg-white"
+        #numberOfBedrooms
+        (click)="divClicked($event)"
       >
         <span class="text-base font-bold pb-4 block"
           >საძინებლების რაოდენობა
@@ -327,6 +339,7 @@
   <app-real-estate-card
     class="card"
     [realEstate]="realEstate"
+    (click)="goToDetailsPage(realEstate.id)"
   ></app-real-estate-card>
   @if(!realEstate){
   <p class="text-xl font-medium col-span-4">
