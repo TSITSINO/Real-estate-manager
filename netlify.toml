@@ -1,5 +1,5 @@
 [build]
-  publish = "dist/Real-estate-manager/"
+  publish = "dist/real-estate-manager/browser"
 
 [[redirects]]
   from = "/*"
