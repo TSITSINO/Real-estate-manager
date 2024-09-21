@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RealEstate, Region } from '../../api/model';
 import { GeographicalInformationService } from '../../api/services/geographical-information.service';
@@ -17,12 +17,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddAgentDialogComponent } from '../../components/add-agent-dialog/add-agent-dialog.component';
 import { Router } from '@angular/router';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-home-page',
   standalone: true,
@@ -51,14 +46,13 @@ export class HomePageComponent implements OnInit {
   public numberOfBedrooms = false;
   public regions$: Observable<Region[]> | undefined;
   realEstates$: Observable<RealEstate[]> | undefined;
-  fb = inject(FormBuilder);
-  filterForm: FormGroup = this.fb.group({
-    region: [],
-    minPrice: [],
-    maxPrice: [],
-    minArea: [],
-    maxArea: [],
-    numberOfBedrooms: [],
+  filterBy: string[] = [];
+
+  filterForm: FormGroup = new FormGroup({
+    region: new FormControl(''),
+    numberOfBedrooms: new FormControl(''),
+    minArea: new FormControl(''),
+    maxArea: new FormControl(''),
   });
 
   openDialog(): void {
@@ -67,7 +61,8 @@ export class HomePageComponent implements OnInit {
       autoFocus: false,
     });
   }
-
+  minArea = [50, 100, 150, 200, 250];
+  maxArea = [100, 150, 200, 250, 300];
   goToDetailsPage(id: number | undefined | null) {
     this.router.navigate(['/Listing-page/'], {
       queryParams: { id: id },
@@ -125,10 +120,80 @@ export class HomePageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.filterForm) console.log(this.filterForm.value);
     this.closeDropdown();
-  }
 
+    if (
+      this.filterForm.get('minArea')?.value &&
+      this.filterForm.get('maxArea')?.value
+    ) {
+      this.filterBy.push(
+        `${this.filterForm.get('minArea')?.value}-${
+          this.filterForm.get('maxArea')?.value
+        }`
+      );
+      this.realEstates$ = this.realEstates$?.pipe(
+        map((realEstates) => {
+          return realEstates.filter((el) => {
+            return el?.area
+              ? this.filterForm.get('maxArea')?.value <
+                  el?.area >
+                  this.filterForm.get('minArea')?.value
+              : null;
+          });
+        })
+      );
+    } else if (this.filterForm.get('minArea')?.value) {
+      this.filterBy.push(this.filterForm.get('minArea')?.value as string);
+      this.realEstates$ = this.realEstates$?.pipe(
+        map((realEstates) => {
+          return realEstates.filter((el) => {
+            return el?.area
+              ? el?.area > this.filterForm.get('minArea')?.value
+              : null;
+          });
+        })
+      );
+    } else if (this.filterForm.get('maxArea')?.value) {
+      this.filterBy.push(this.filterForm.get('maxArea')?.value as string);
+      this.realEstates$ = this.realEstates$?.pipe(
+        map((realEstates) => {
+          return realEstates.filter((el) => {
+            return el?.area
+              ? el?.area < this.filterForm.get('maxArea')?.value
+              : null;
+          });
+        })
+      );
+    }
+
+    if (this.filterForm.get('region')?.value) {
+      this.filterBy.push(this.filterForm.get('region')?.value as string);
+      this.realEstates$ = this.realEstates$?.pipe(
+        map((realEstates) => {
+          return realEstates.filter((el) => {
+            return el.city.region?.name == this.filterForm.get('region')?.value;
+          });
+        })
+      );
+    }
+    if (this.filterForm.get('numberOfBedrooms')?.value) {
+      this.filterBy.push(
+        this.filterForm.get('numberOfBedrooms')?.value as string
+      );
+      this.realEstates$ = this.realEstates$?.pipe(
+        map((realEstates) => {
+          return realEstates.filter((el) => {
+            return (
+              el.bedrooms == this.filterForm.get('numberOfBedrooms')?.value
+            );
+          });
+        })
+      );
+    }
+  }
+  cancelFilter(item: string) {
+    this.filterBy = this.filterBy.filter((el) => el !== item);
+  }
   ngOnInit(): void {
     this.regions$ = this.geographicalInformationService.getRegions();
     this.realEstates$ = this.realEstateService.getRealEstates();

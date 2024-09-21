@@ -54,10 +54,10 @@ export class ListingPageComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.router.navigate(['/home-page/']);
         this.realEstateService.deleteRealEstate(id).subscribe(
           (response) => {
             console.log('Success:', response);
+            this.router.navigate(['/home-page/']);
           },
           (error) => {
             console.error('Error:', error);
