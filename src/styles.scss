@@ -5,27 +5,8 @@
 @tailwind utilities;
 
 /* firago-latin-400-normal */
-@font-face {
-  font-family: "FiraGO";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url(@fontsource/firago/files/firago-latin-400-normal.woff2)
-      format("woff2"),
-    url(@fontsource/firago/files/firago-latin-400-normal.woff) format("woff");
-}
 
 html,
 body {
   height: 100%;
-}
-
-body,
-button,
-input,
-textarea,
-select,
-h1,
-p {
-  font-family: "FiraGO", sans-serif !important;
 }
