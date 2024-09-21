@@ -25,6 +25,12 @@ export class RealEstateService {
     });
   }
 
+  getRealEstatesById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/real-estates/${id}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
   postRealEstates(realEstate: NewRealEstate): Observable<any> {
     const formData = new FormData();
 
@@ -44,16 +50,9 @@ export class RealEstateService {
       formData.append('is_rental', realEstate.is_rental.toString());
     if (realEstate.agent_id)
       formData.append('agent_id', realEstate.agent_id.toString());
-
-    // Append the image file if available
     if (realEstate.image instanceof File) {
       formData.append('image', realEstate.image);
     }
-
-    // Log FormData content for debugging
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
 
     return this.http
       .post<any>(`${this.apiUrl}/real-estates`, formData, {
@@ -65,5 +64,11 @@ export class RealEstateService {
           return throwError(error);
         })
       );
+  }
+
+  deleteRealEstate(id: number) {
+    return this.http.delete(`${this.apiUrl}/real-estates/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 }

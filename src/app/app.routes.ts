@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { AddListingPageComponent } from './pages/add-listing-page/add-listing-page.component';
+import { ListingPageComponent } from './pages/listing-page/listing-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home-page', pathMatch: 'full' },
@@ -11,5 +12,9 @@ export const routes: Routes = [
   {
     path: 'add-Listing',
     component: AddListingPageComponent,
+  },
+  {
+    path: 'Listing-page',
+    component: ListingPageComponent,
   },
 ];

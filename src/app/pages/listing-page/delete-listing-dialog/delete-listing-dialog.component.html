@@ -1,0 +1,17 @@
+<section class="m-10">
+  <p class="text-lg">გსურთ წაშალოთ ლისტინგი?</p>
+  <div class="flex gap-2">
+    <button
+      class="bg-white hover:bg-primary hover:text-white rounded-lg border-2 border-gray ml-2 p-2"
+      mat-dialog-close
+    >
+      გაუქმება
+    </button>
+    <button
+      class="bg-primary rounded-lg hover:bg-dark text-white p-2"
+      [mat-dialog-close]="true"
+    >
+      დადასტურება
+    </button>
+  </div>
+</section>

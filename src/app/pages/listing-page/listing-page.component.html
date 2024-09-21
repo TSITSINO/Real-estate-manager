@@ -1,0 +1,106 @@
+<section class="ml-20 my-4">
+  <img
+    src="assets\back-icon.svg"
+    class="ml-2 w-4 cursor-pointer"
+    alt=""
+    (click)="goBack()"
+  />
+</section>
+<section class="ml-20 my-4 grid grid-cols-2">
+  @if(realEstate){
+  <div>
+    <img [src]="realEstate.image" class="ml-2 rounded-t-lg" alt="" />
+    <div class="w-full flex justify-end mt-4">
+      <p class="text-secondary">
+        გამოქვეყნების თარიღი {{ realEstate.created_at | date : "dd/MM/yy" }}
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col justify-start items-start p-8">
+    <p class="flex flex-row">
+      <span class="font-extrabold text-[48px]">{{ realEstate.price }}</span
+      ><img src="assets\Gel.svg" alt="" class="ml-2 w-5" />
+    </p>
+    <p class="text-secondary flex justify-start gap-1 text-sm pt-6">
+      <img src="assets\place-icon.svg" alt="" class="size-4" />
+      <span>{{ realEstate.address }}</span>
+    </p>
+    <p
+      class="text-secondary flex justify-start gap-1 items-center text-sm ml-1 mt-1"
+    >
+      <img src="assets\vector.svg" alt="" class="size-4" />
+      <span>ფართი {{ realEstate.area }} <sup>2</sup></span>
+    </p>
+    <p class="flex justify-start gap-1 text-sm items-center mt-1">
+      <img src="assets\bed.svg" alt="" class="size-5" />
+      <span>საძინებელი {{ realEstate.bedrooms }}</span>
+    </p>
+
+    <p
+      class="text-secondary flex justify-start gap-1 items-center text-sm mt-1"
+    >
+      <img src="assets\zip-cod-icon.svg" alt="" class="size-4" />
+      <span> საფოსტო ინდექსი {{ realEstate.zip_code }}</span>
+    </p>
+    <p class="text-secondary flex justify-start gap-1 text-sm items-center p-3">
+      {{ realEstate.description }}
+    </p>
+
+    <div class="border-2 border-gray rounded-lg w-[508px] p-8">
+      <div class="flex size-[72px]">
+        <img
+          [src]="realEstate.agent.avatar"
+          alt=""
+          class="!size-[72px] rounded-full"
+        />
+        <div class="flex flex-col ml-2 justify-center">
+          <p class="text-nowrap">
+            {{ realEstate.agent.name }} {{ realEstate.agent.surname }}
+          </p>
+          <p class="text-secondary text-sm">აგენტი</p>
+        </div>
+      </div>
+      <div class="mt-2">
+        <p
+          class="text-secondary flex justify-start gap-1 items-center text-sm mt-1"
+        >
+          <img src="assets\email-icon.svg" alt="" class="size-4" />
+          <span> {{ realEstate.agent.email }}</span>
+        </p>
+        <p
+          class="text-secondary flex justify-start gap-1 items-center text-sm mt-1"
+        >
+          <img src="assets\phone-icon.svg" alt="" class="size-4" />
+          <span> {{ realEstate.agent.phone }}</span>
+        </p>
+      </div>
+    </div>
+
+    <button
+      class="bg-white hover:bg-primary hover:text-white rounded-lg border-2 border-gray mt-4 p-2"
+      (click)="openDialog(realEstate.id)"
+    >
+      ლისტინგის წაშლა
+    </button>
+  </div>
+  }
+</section>
+<section class="!px-20">
+  <p-carousel
+    *ngIf="products"
+    [value]="products"
+    [numVisible]="4"
+    [numScroll]="1"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-product pTemplate="item">
+      <div class="border-1 max-w-80 surface-border border-round m-2 p-3">
+        <app-real-estate-card
+          [realEstate]="product"
+          class="!max-w-80"
+          (click)="goToDetailsPage(product.id)"
+        ></app-real-estate-card>
+      </div>
+    </ng-template>
+  </p-carousel>
+</section>
